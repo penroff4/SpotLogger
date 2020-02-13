@@ -3,7 +3,7 @@ import SpotLogger
 
 # subprocess.run('set-CLI.bat')
 """
-    set the below system variables:
+    set the below system variables:pycharm 
         SPOTIPY_CLIENT_ID
         SPOTIPY_CLIENT_SECRET
         SPOTIPY_REDIRECT_URI
