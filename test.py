@@ -1,29 +1,39 @@
+# import subprocess
+import SpotLogger
+
+# subprocess.run('set-CLI.bat')
 """
-# mac OS
-import os
-os.system('')
+    set the below system variables:
+        SPOTIPY_CLIENT_ID
+        SPOTIPY_CLIENT_SECRET
+        SPOTIPY_REDIRECT_URI
+        SPOTIPY_USERNAME
+        SPOTIPY_SCOPE
 """
 
-"""
-Left over from initial Windows environ variable set
-# res = subprocess.check_output('set-CLI.bat')
-#subprocess.check_output('echo %SPOTIPY_REDIRECT_URI%')
-"""
-import subprocess
+SPOTIPY_CLIENT_ID = ''
+SPOTIPY_CLIENT_SECRET = ''
+SPOTIPY_REDIRECT_URI = 'http://google.com'
+SPOTIPY_USERNAME = 'penroff4@gmail.com'
+SPOTIPY_SCOPE = 'user-read-recently-played'
 
-"""
-  set 
-    SPOTIPY_CLIENT_ID
-    SPOTIPY_CLIENT_SECRET
-    SPOTIPY_REDIRECT_URI
-"""
-
-subprocess.run('set-CLI.bat')
-
-util.prompt_for_user_token(
-      'username'
-    , 'scope'
-    , os.environ['%SPOTIPY_CLIENT_ID']
-    , os.environ['SPOTIPY_CLIENT_SECRET']
-    , os.environ['SPOTIPY_CLIENT_']
+SpotLoggerOne = SpotLogger.SpotLogger(
+    SPOTIPY_USERNAME
+    , SPOTIPY_SCOPE
+    , SPOTIPY_CLIENT_ID
+    , SPOTIPY_CLIENT_SECRET
+    , SPOTIPY_REDIRECT_URI
 )
+
+#  prompts user to authorize app
+SpotLoggerOne.get_spotify_auth_token()
+
+#  gets json of recently played tracks from spotify
+SpotLoggerOne.get_recently_played_songs()
+
+#  outputs json to file
+SpotLoggerOne.output_recently_played_to_json_file()
+
+# record payload details
+
+# record
