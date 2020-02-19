@@ -1,5 +1,4 @@
 import json
-import numpy as np
 import pandas as pd
 
 
@@ -8,15 +7,17 @@ class ScribeLogger:
         self.dump_file = dump_file
         self.rpl_data = None
         self.rpl_json = None
+        self.rpl_df = None
 
         self.payload_data = None
-        self.items_data = None
+        self.items_df = None
 
     def read_json(self):
 
         with open(self.dump_file, "r") as file:
             self.rpl_data = file.read().replace('\n', '')
             self.rpl_json = json.loads(self.rpl_data)
+            self.rpl_df = pd.DataFrame(self.rpl_data)
 
     def prep_payload_data(self):
 
@@ -40,20 +41,22 @@ class ScribeLogger:
             , 'context': []
             , 'track': []
         }
-
-        items_df = pd.DataFrame(data=items_list)
+        self.items_df = pd.DataFrame(data=items_list)
 
         # Loop through items JSON to record initial items_contents dict
         # after recording contents of a loop, log to df
 
-        item_contents = []
+        item_loader = {}
 
-        for i in self.rpl_json['items']:
-            item_contents[i] = self.rpl_json['items'][i]
+        for item in range(len(self.rpl_json['items'])):
 
-            item_contents['record_id'] = record_id
+            for key in self.rpl_json['items'][item]:
 
-            items_df.append(item_contents)
+                item_loader[key] = self.rpl_json['items'][item][key]
+
+            item_loader['record_id'] = record_id
+
+            self.items_df = self.items_df.append(item_loader, ignore_index=True)
 
             record_id += 1
 
@@ -67,13 +70,16 @@ class ScribeLogger:
             record_id = 1
 
             # build items_list for df set up
-            tracks_iist = {
+            tracks_list = {
                 'record_id': record_id
-                , 'context': []
-                , 'track': []
+                , '': []
             }
 
-            items_df = pd.DataFrame(data=items_list)
+            tracks_df = pd.DataFrame(data=tracks_list)
+
+            tracks_df.append(tracks_list)
+
+            record_id += 1
 
 
 #    def prep_track_data(self):
