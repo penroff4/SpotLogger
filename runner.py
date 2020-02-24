@@ -5,10 +5,10 @@ from Models.ScribeLogger import ScribeLogger
 from Models.LiteLogger import LiteLogger
 
 # Spotify API Connect details
-SPOTIPY_CLIENT_ID = '790fb465c980470886e0887c7c02cb7a'
-SPOTIPY_CLIENT_SECRET = 'a41fec8061c54bfd94c1d857c2965ba5'
+SPOTIPY_CLIENT_ID = ''
+SPOTIPY_CLIENT_SECRET = ''
 SPOTIPY_REDIRECT_URI = 'http://google.com'
-SPOTIPY_USERNAME = 'penroff4@gmail.com'
+SPOTIPY_USERNAME = ''
 SPOTIPY_SCOPE = 'user-read-recently-played'
 
 # JSON Output file
