@@ -15,7 +15,7 @@ SPOTIPY_SCOPE = 'user-read-recently-played'
 JSON_output_file = 'recently-played-list.txt'
 
 # sqlite variables
-SPOTLOGGER_DB = os.getcwd()+"\data\SpotLogger.db"
+SPOTLOGGER_DB = os.getcwd()+"/data/SpotLogger.db"
 COMMIT_CONFIRM = None
 
 # Create SpotLogger to call Spotify
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # read dump_file back in as JSON, self.rpl_json
     ScribeLoggerOne.read_json()
-    
+
     # build payload_df
     ScribeLoggerOne.prep_payload_data()
 
@@ -60,30 +60,17 @@ if __name__ == "__main__":
     # build items_df
     ScribeLoggerOne.prep_items_df()
 
-    # payload_data = []
-
-    # operate over JSON to build context table
-    # context_data = []
-
-    # operate over JSON to build track table
-    # track_data = []
-
-    # operate over JSON to build artist table
-    # artist_data = []
-
-    # operate over JSON to build album table
-    # album_data = []
-
     # Connect to sqlitedb
-    # LiteLoggerOne.setup()
+    LiteLoggerOne.setup()
 
     # insert payload record(s)
-    # LiteLoggerOne.record_payload_sqllite(payload_data)
+    LiteLoggerOne.record_payload_sqllite(ScribeLoggerOne.payload_data)
+
+    # commit SQLite Records if 1
+    LiteLoggerOne.teardown(commit_confirm=1)
 
     # insert context record(s)
     # LiteLoggerOne.record_context_sqllite(context_data)
-
-    # insert track record(s)
     # LiteLoggerOne.record_track_sqllite(track_data)
 
     # insert artist record(s)

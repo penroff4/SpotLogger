@@ -45,8 +45,8 @@ class SpotLogger:
 
         # need logic to deal with API return pagination
 
-    def output_recently_played_to_json_file(self):
+    def output_recently_played_to_json_file(self, dump_file):
         """use json.dump to output JSON
     """
-        with open('recently-played-list.txt', 'w') as list_file:
+        with open(dump_file, 'w') as list_file:
             json.dump(self.recently_played_list, list_file)

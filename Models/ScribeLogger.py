@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+from datetime import date
 
 
 class ScribeLogger:
@@ -17,7 +18,7 @@ class ScribeLogger:
         with open(self.dump_file, "r") as file:
             self.rpl_data = file.read().replace('\n', '')
             self.rpl_json = json.loads(self.rpl_data)
-            self.rpl_df = pd.DataFrame(self.rpl_data)
+            # self.rpl_df = pd.DataFrame(self.rpl_json)
 
     def prep_payload_data(self):
 
@@ -27,7 +28,7 @@ class ScribeLogger:
             "payload_cursors_after": self.rpl_json['cursors']['after'],
             "payload_cursors_before": self.rpl_json['cursors']['before'],
             "payload_limit": self.rpl_json['limit'],
-            "payload_href": self.rpl_json['href'],
+            "payload_href": self.rpl_json['href']
         }
 
     def prep_items_df(self):
