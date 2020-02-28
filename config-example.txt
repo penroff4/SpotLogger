@@ -1,0 +1,11 @@
+[SPOTIFY]
+ClientID=string
+ClientSecret=string
+RedirectURI=url
+Username=string
+Scope=string
+
+[OUTPUTS]
+json_output=data/recently-played-list.txt
+spotlogger_db=string
+commit_confirm=1
