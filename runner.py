@@ -1,22 +1,37 @@
 import os
+import argparse
 import json
+import configparser
 from Models.SpotLogger import SpotLogger
 from Models.ScribeLogger import ScribeLogger
 from Models.LiteLogger import LiteLogger
 
+# set up arg parser
+parser = argparse.ArgumentParser(description='Log Spotify data...')
+# set up db-commit argument
+parser.add_argument('db-commit', type=int, help='1 to commit, 0 to not', default=0)
+
+# Process cmd line args
+args = parser.parse_args()
+
+# set up config parser
+config = configparser.ConfigParser()
+config.read('config.txt')
+
 # Spotify API Connect details
-SPOTIPY_CLIENT_ID = ''
-SPOTIPY_CLIENT_SECRET = ''
-SPOTIPY_REDIRECT_URI = 'http://google.com'
-SPOTIPY_USERNAME = ''
-SPOTIPY_SCOPE = 'user-read-recently-played'
+SPOTIPY_CLIENT_ID = config['SPOTIFY']['ClientID']
+SPOTIPY_CLIENT_SECRET = config['SPOTIFY']['ClientSecret']
+SPOTIPY_REDIRECT_URI = config['SPOTIFY']['RedirectURI']
+SPOTIPY_USERNAME = config['SPOTIFY']['Username']
+SPOTIPY_SCOPE = config['SPOTIFY']['Scope']
 
 # JSON Output file
-JSON_output_file = 'recently-played-list.txt'
+JSON_output_file = config['OUTPUTS']['json_output']
 
 # sqlite variables
-SPOTLOGGER_DB = os.getcwd()+"/data/SpotLogger.db"
-COMMIT_CONFIRM = None
+SPOTLOGGER_DB = config['OUTPUTS']['spotlogger_db']
+# COMMIT_CONFIRM = int(config['OUTPUTS']['commit_confirm'])
+COMMIT_CONFIRM = int(args.db-commit)
 
 # Create SpotLogger to call Spotify
 SpotLoggerOne = SpotLogger(

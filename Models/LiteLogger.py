@@ -1,5 +1,5 @@
 import sqlite3
-from datetime import date
+from datetime import datetime
 
 
 class LiteLogger:
@@ -8,7 +8,7 @@ class LiteLogger:
         self.database = database
         self.conn = None
         self.cursor = None
-        self.now = date.today()
+        self.now = datetime.today()
 
     def setup(self):
         self.conn = sqlite3.connect(self.database)
@@ -29,12 +29,11 @@ class LiteLogger:
                 str(payload_data["payload_cursors_before"]),
                 str(payload_data["payload_limit"]),
                 str(payload_data["payload_href"]),
-                1,
                 str(self.now)
             ]
 
         self.cursor.execute(
-          "INSERT INTO loader_payload VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO loader_payload ([items], [next], [cursors_after], [cursors_before], [limit], [href], [date_created]) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 payload_loader)
 
     def record_context_sqllite(self, context_data):
