@@ -9,7 +9,7 @@ from Models.LiteLogger import LiteLogger
 # set up arg parser
 parser = argparse.ArgumentParser(description='Log Spotify data...')
 # set up db-commit argument
-parser.add_argument('db-commit', type=int, help='1 to commit, 0 to not', default=0)
+parser.add_argument('-c', '--db-commit', type=int, help='1 to commit, 0 to not', default=0)
 
 # Process cmd line args
 args = parser.parse_args()
@@ -31,7 +31,7 @@ JSON_output_file = config['OUTPUTS']['json_output']
 # sqlite variables
 SPOTLOGGER_DB = config['OUTPUTS']['spotlogger_db']
 # COMMIT_CONFIRM = int(config['OUTPUTS']['commit_confirm'])
-COMMIT_CONFIRM = int(args.db-commit)
+COMMIT_CONFIRM = int(args.db_commit)
 
 # Create SpotLogger to call Spotify
 SpotLoggerOne = SpotLogger(
@@ -82,7 +82,7 @@ if __name__ == "__main__":
     LiteLoggerOne.record_payload_sqllite(ScribeLoggerOne.payload_data)
 
     # commit SQLite Records if 1
-    LiteLoggerOne.teardown(commit_confirm=1)
+    LiteLoggerOne.teardown(commit_confirm=COMMIT_CONFIRM)
 
     # insert context record(s)
     # LiteLoggerOne.record_context_sqllite(context_data)
