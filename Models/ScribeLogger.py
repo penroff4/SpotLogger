@@ -126,29 +126,29 @@ class ScribeLogger:
         album_holder = {}
 
         # for each track in items_df...
-        for track in range(len(items_df['track'])):
+        for track in range(len(self.items_df['track'])):
 
             # build dict object for track
             
             # What am I doing with this? mbp 02-29-2020
             # track_holder = items_df['track'][track]
 
-            for key in items_df['track'][i]:
+            for key in self.items_df['track'][track]:
 
                 if key == 'artists':
-                    artist_holder[record_id] = items_df['track'][i]
+                    artist_holder[record_id] = self.items_df['track'][track][key]
 
                 elif key == 'album':
-                    album_holder[record_id] = items_df['track'][i]
+                    album_holder[record_id] = self.items_df['track'][track][key]
 
                 else:
                     #record the col and its value
-                    tracks_loader[key] = items_df['track'][i]
+                    tracks_loader[key] = self.items_df['track'][track][key]
 
             # load track str into JSON
             # tracks[i] = json.dumps(items_df[i]['track'])
 
-            self.tracks_df.append(tracks_loader)
+            self. tracks_df = self.tracks_df.append(tracks_loader, ignore_index=True)
 
             record_id += 1
 
