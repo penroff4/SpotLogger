@@ -66,14 +66,14 @@ if __name__ == "__main__":
     # read dump_file back in as JSON, self.rpl_json
     ScribeLoggerOne.read_json()
 
-    # build payload_df
-    ScribeLoggerOne.prep_payload_data()
-
     # build self.payload_data
     ScribeLoggerOne.prep_payload_data()
 
     # build items_df
     ScribeLoggerOne.prep_items_df()
+
+    # build tracks df
+    ScribeLoggerOne.prep_tracks_df(ScribeLoggerOne.items_df)
 
     # Connect to sqlitedb
     LiteLoggerOne.setup()
@@ -81,20 +81,27 @@ if __name__ == "__main__":
     # insert payload record(s)
     LiteLoggerOne.record_payload_sqllite(ScribeLoggerOne.payload_data)
 
-    # commit SQLite Records if 1
-    LiteLoggerOne.teardown(commit_confirm=COMMIT_CONFIRM)
+    ###                         NOTE TO SELF                        ###
+    ### I realize now that the dim tables (eg artist, album, track) ###
+    ### will all need logic to check for existing records as well   ###
+    ### as logic for updates.  i.e. I'll need to read in the        ###
+    ### existing SQL table, turn that into a DF to work over, and   ###
+    ### then comapre.  Womp womp                                    ###
+
+    # update artist data
+    # LiteLoggerOne.record_artist_sqllite(ScribeLoggerOne.artist_data)
+
+    # update album record(s)
+    # LiteLoggerOne.record_album_sqllite(album_data)
+
+    # update track table
+
+    # record context data
 
     # insert context record(s)
     # LiteLoggerOne.record_context_sqllite(context_data)
     # LiteLoggerOne.record_track_sqllite(track_data)
 
-    # insert artist record(s)
-    # LiteLoggerOne.record_artist_sqllite(artist_data)
+    # commit SQLite Records if 1
+    LiteLoggerOne.teardown(commit_confirm=COMMIT_CONFIRM)
 
-    # insert album record(s)
-    # LiteLoggerOne.record_album_sqllite(album_data)
-
-    # if 1 == 1:
-    #    LiteLoggerOne.teardown(COMMIT_CONFIRM)
-    # else:
-    #    0
