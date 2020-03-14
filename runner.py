@@ -75,6 +75,19 @@ if __name__ == "__main__":
     # build tracks df
     ScribeLoggerOne.prep_tracks_df(ScribeLoggerOne.items_df)
 
+    # 'fix' artist_holder object, ie flatten out the external urls section
+    ScribeLoggerOne.artist_holder = ScribeLoggerOne.flatten_artist_holder(ScribeLoggerOne.artist_holder)
+
+    # build artist df
+    ScribeLoggerOne.prep_artist_df(ScribeLoggerOne.artist_holder)
+
+    # build album df
+    ScribeLoggerOne.prep_album_df(ScribeLoggerOne.album_holder)
+
+    # update tracks df
+
+    # build context df
+
     # Connect to sqlitedb
     LiteLoggerOne.setup()
 

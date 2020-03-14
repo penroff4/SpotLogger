@@ -1,0 +1,11 @@
+[SPOTIFY]
+ClientID=790fb465c980470886e0887c7c02cb7a
+ClientSecret=a41fec8061c54bfd94c1d857c2965ba5
+RedirectURI=http://google.com
+Username=penroff4@gmail.com
+Scope=user-read-recently-played
+
+[OUTPUTS]
+json_output=data/recently-played-list.txt
+spotlogger_db=/Users/penroff4/Dev/PythonApps/Spotlogger/Data/Spotlogger.db
+commit_confirm=1

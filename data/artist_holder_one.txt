@@ -1,0 +1,1 @@
+[{"external_urls": {"spotify": "https://open.spotify.com/artist/2JzhQYGos3RqV7MT5fWeek"}, "href": "https://api.spotify.com/v1/artists/2JzhQYGos3RqV7MT5fWeek", "id": "2JzhQYGos3RqV7MT5fWeek", "name": "Porches", "type": "artist", "uri": "spotify:artist:2JzhQYGos3RqV7MT5fWeek"}]

@@ -13,6 +13,9 @@ class ScribeLogger:
         self.payload_data = None
         self.items_df = None
 
+        self.album_holder = {}
+        self.artist_holder = {}
+
     def read_json(self):
 
         with open(self.dump_file, "r") as file:
@@ -77,12 +80,6 @@ class ScribeLogger:
         # set loop var at
         record_id = 1
 
-        ### NOTE TO SELF ###
-        ### The track JSON include sub JSON components for the artist and ###
-        ### album keys.  So the right way to do this is to set the album  ###
-        ### and artist dicts aside, build out the rest of the track df    ###
-        ### with the artist and album cols with an id to tie back to json ###
-
         # build tracks_list for df set up
         # ie tracks_list is just a template1
         tracks_df_template = {
@@ -107,48 +104,120 @@ class ScribeLogger:
         # create tracks_df
         self.tracks_df = pd.DataFrame(data=tracks_df_template)
 
-        # Loop through items_df to record initial tracks_loader dict
-        # after recording contents of a loop, log to df
-
-        # set up tracks_loader var.  This will hold the data for a given
-        # track record to be loaded into tracks_df
+        # set up tracks_loader.  This will hold data to go into tracks_df
         tracks_loader = {}
-
-        # set up artist_holder and album_holder.  These dicts will hold a int
-        # dict pairing per record where the int is the record_id identifier for
-        # the track record and the dict is the actual artist or album info.
-
-        # once the holder dicts have been set up, they can be iterated over to
-        # build out data frames.  The tracks DF can then be updated with an
-        # artist or album PK as necessary, and the artist and album tables will
-        # be all but ready for pushing to SQLites
-        artist_holder = {}
-        album_holder = {}
 
         # for each track in items_df...
         for track in range(len(self.items_df['track'])):
 
-            # build dict object for track
-            
-            # What am I doing with this? mbp 02-29-2020
-            # track_holder = items_df['track'][track]
-
+            # and each column in that track record
             for key in self.items_df['track'][track]:
 
                 if key == 'artists':
-                    artist_holder[record_id] = self.items_df['track'][track][key]
+                    # add artist data to holder object
+                    self.artist_holder[record_id] = self.items_df['track'][track][key]
 
                 elif key == 'album':
-                    album_holder[record_id] = self.items_df['track'][track][key]
+                    # add album data to holder object
+                    self.album_holder[record_id] = self.items_df['track'][track][key]
 
                 else:
                     #record the col and its value
                     tracks_loader[key] = self.items_df['track'][track][key]
 
-            # load track str into JSON
-            # tracks[i] = json.dumps(items_df[i]['track'])
+            # add PK for record
+            tracks_loader['record_id'] = record_id
 
-            self. tracks_df = self.tracks_df.append(tracks_loader, ignore_index=True)
+            # add tracks_loader as a record into tracks_df
+            self.tracks_df = self.tracks_df.append(tracks_loader, ignore_index=True)
+
+            # increment record_id
+            record_id += 1
+
+    @staticmethod
+    def flatten_artist_holder(artist_holder):
+
+        # check a given item in artist_holder lis
+        for list_item in range(len(artist_holder)):
+            # first, increment list_item as JSON starts at 1
+            list_item += 1
+            # artist_holder JSON is a list inside a list, inner list is
+            # always a single item list containing a dict
+
+            # pull the spotify url and replace the 'external_urls' content
+            artist_holder[list_item][0]['external_urls']=artist_holder[list_item][0]['external_urls']['spotify']
+
+        # return updated list
+        return artist_holder
+
+    def prep_artist_df(self, artist_holder):
+
+        record_id = 1
+
+        artist_loader = {}
+
+        self.artist_df = {
+                'album_type': [] # str
+                , 'artists': [] # dict of artist related data, need to normalize
+                , 'external_urls': [] # str
+                , 'href': [] # str
+                , 'id': [] # str
+                , 'images': [] # list of dicts holding individual image data (ie multiple images)
+                , 'name': [] # str
+                , 'release_date': [] # url
+                , 'release_date_precision': [] # str
+                , 'total_tracks': [] #  possibly bool, but to be safe str
+                , 'type': [] # str
+                , 'uri': [] # int
+            }
+
+        for record in range(len(artist_holder)):
+            # increment record as JSON starts at 1 not 0
+            record += 1
+
+            # using [record][0] below as record is a list containing an
+            # additional list starting (and ending) at 0
+            for column in artist_holder[record][0]:
+                artist_loader[column] = artist_holder[record][0][column]
+
+            # add PK for record
+            artist_loader['record id'] = record_id
+
+            self.artist_df = self.artist_df.append(artist_loader, ignore_index=True)
+
+            record_id += 1
+
+
+    def prep_album_df(self, album_holder):
+
+        record_id = 1
+
+        album_loader = {}
+
+        self.album_df = {
+                'album_type': [] # str
+                , 'artists': [] # dict of artist related data, need to normalize
+                , 'external_urls': ' ' # str
+                , 'href': [] # str
+                , 'id': [] # str
+                , 'images': [] # list of dicts holding individual image data (ie multiple images)
+                , 'name': [] # str
+                , 'release_date': [] # date
+                , 'release_date_precision': [] # str
+                , 'total_tracks': [] #  int
+                , 'type': [] # str
+                , 'uri': [] # str
+            }
+
+        for record in range(len(album_holder)):
+
+            for col in album_holder[record]:
+
+                album_loader[col] = album_holder[record][col]
+
+            album_loader['record id'] = record_id
+
+            self.album_df = self.album_df.append(album_loader, ignore_index=True)
 
             record_id += 1
 
