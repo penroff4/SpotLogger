@@ -88,10 +88,10 @@ class ScribeLogger:
                 , 'disc_number': ' ' # int
                 , 'duration_ms': [] # int
                 , 'explicit': [] # probably bool, but to be safe str
-                , 'external_ids': [] # dict, probably not necessary data
-                , 'external_urls': [] # dict, keep only spotify value?'
+                , 'isrc_id': [] # dict, need to flatten to get isrc
+                , 'spotify_url': [] # dict, need to flatten to get spotify url'
                 , 'href': [] # url
-                , 'id': [] # str
+                , 'spotify_id': [] # str
                 , 'is_local': [] #  possibly bool, but to be safe str
                 , 'name': [] # str
                 , 'popularity': [] # int
@@ -113,13 +113,22 @@ class ScribeLogger:
             # and each column in that track record
             for key in self.items_df['track'][track]:
 
+
                 if key == 'artists':
                     # add artist data to holder object
                     self.artist_holder[record_id] = self.items_df['track'][track][key]
 
+                    # add artist spotify ID to track loader
+                    tracks_loader[key] = self.items_df['track'][track]['artists'][0]['id']
+
+
                 elif key == 'album':
                     # add album data to holder object
                     self.album_holder[record_id] = self.items_df['track'][track][key]
+
+                    # add album spotify ID to track loader
+                    tracks_loader[key] = self.items_df['track'][track]['album']['id']
+
 
                 else:
                     #record the col and its value
